@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Script para convertir imágenes NIfTI (.nii.gz) a PNG aplicando windowing.
-Adaptado para su ejecución en Compute Canada.
+Script to convert NIfTI images (.nii.gz) to PNG by applying windowing to the images
 """
 
 import numpy as np
