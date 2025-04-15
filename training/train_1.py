@@ -18,13 +18,13 @@ from transformers import (SegformerImageProcessor, SegformerForSemanticSegmentat
                           TrainingArguments, Trainer, EarlyStoppingCallback)
 
 # ============================
-# 1. Definir las rutas (actualiza estas rutas para Compute Canada)
+# 1. Routes
 # ============================
 train_img_dir = "/home/jair/projects/def-saadi/jair/Data/data_original/data_reduced_png/imagesTr_red_png"
 train_mask_dir = "/home/jair/projects/def-saadi/jair/Data/data_original/data_reduced_png/labelsTr_red_png"
 val_img_dir   = "/home/jair/projects/def-saadi/jair/Data/data_original/data_reduced_png/imagesVal_red_png"
 val_mask_dir  = "/home/jair/projects/def-saadi/jair/Data/data_original/data_reduced_png/labelsVal_red_png"
-# Directorio para guardar el modelo final
+# Save the final model
 model_save_path = "/home/jair/projects/def-saadi/jair/models/model_test_1.0"
 
 # ============================
@@ -68,7 +68,7 @@ class LiverDataset(Dataset):
         return {"pixel_values": pixel_values, "labels": mask}
 
 # ============================
-# 3. Configuración del modelo y datasets
+# 3. Configuration
 # ============================
 model_checkpoint = "nvidia/segformer-b0-finetuned-ade-512-512"
 feature_extractor = SegformerImageProcessor.from_pretrained(model_checkpoint)
@@ -82,9 +82,6 @@ val_dataset   = LiverDataset(val_img_dir, val_mask_dir, feature_extractor)
 training_args = TrainingArguments(
     output_dir="/home/jair/projects/def-saadi/jair/models/model_test_1.0_results",
     run_name="model_test_1.0",
-    # "eval_strategy" puede ser "epoch" o "steps":
-    #  - "epoch": Evalúa al finalizar cada época.
-    #  - "steps": Evalúa cada cierto número de pasos (definir con eval_steps), útil cuando las épocas son muy largas.
     eval_strategy="epoch",
     save_strategy="epoch",
     learning_rate=1e-4,
