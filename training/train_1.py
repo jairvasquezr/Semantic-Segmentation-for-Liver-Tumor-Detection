@@ -28,7 +28,7 @@ val_mask_dir  = "/home/jair/projects/def-saadi/jair/Data/data_original/data_redu
 model_save_path = "/home/jair/projects/def-saadi/jair/models/model_test_1.0"
 
 # ============================
-# 2. Funciones auxiliares para carga de datos
+# 2. Functions
 # ============================
 def load_image(path):
     return Image.open(path).convert("RGB")
@@ -60,7 +60,7 @@ class LiverDataset(Dataset):
         pixel_values = encoding["pixel_values"].squeeze(0)
 
         mask = np.array(mask, dtype=np.int64)
-        # Reasignar valores en la máscara según tus necesidades:
+        # values of the mask:
 	#mask[mask == 127] = 1
         #mask[mask == 255] = 2
         mask = torch.tensor(mask, dtype=torch.long)
@@ -77,7 +77,7 @@ train_dataset = LiverDataset(train_img_dir, train_mask_dir, feature_extractor)
 val_dataset   = LiverDataset(val_img_dir, val_mask_dir, feature_extractor)
 
 # ============================
-# 4. Definir los argumentos de entrenamiento
+# 4. Arguments
 # ============================
 training_args = TrainingArguments(
     output_dir="/home/jair/projects/def-saadi/jair/models/model_test_1.0_results",
@@ -89,16 +89,16 @@ training_args = TrainingArguments(
     per_device_eval_batch_size=16,
     gradient_accumulation_steps=4,
     eval_accumulation_steps=8,
-    num_train_epochs=30,
+    num_train_epochs=50,
     weight_decay=0.01,
     push_to_hub=False,
     load_best_model_at_end=True,
     metric_for_best_model="eval_loss",
-    report_to=[],                   # Deshabilita WandB
+    report_to=[],                 
 )
 
 # ============================
-# 5. Configurar el modelo
+# 5. Configure the model
 # ============================
 model = SegformerForSemanticSegmentation.from_pretrained(
     model_checkpoint,
@@ -106,12 +106,12 @@ model = SegformerForSemanticSegmentation.from_pretrained(
     ignore_mismatched_sizes=True
 )
 
-# Liberar memoria innecesaria
+# Free unnecessary memory
 gc.collect()
 torch.cuda.empty_cache()
 
 # ============================
-# 6. Definir la métrica y función de evaluación
+# 6. Define the metric and evaluation function
 # ============================
 metric = load("mean_iou")
 
@@ -144,7 +144,7 @@ def compute_metrics(eval_pred):
     return final_results
 
 # ============================
-# 7. Configurar el Trainer
+# 7. Configure the Trainer
 # ============================
 trainer = Trainer(
     model=model,
@@ -160,7 +160,7 @@ trainer = Trainer(
 )
 
 # ============================
-# 8. Entrenamiento y guardado del modelo
+# 8. Training and saving the model
 # ============================
 if __name__ == '__main__':
     trainer.train()
