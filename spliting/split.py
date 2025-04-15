@@ -5,23 +5,22 @@ import shutil
 import argparse
 
 def split_dataset(images_dir, labels_dir, output_dir, train_ratio=0.7, test_ratio=0.2, val_ratio=0.1):
-    # Definir rutas de salida para imágenes
+    # output routes for images
     imagesTr_dir = os.path.join(output_dir, "imagesTr")
     imagesTs_dir = os.path.join(output_dir, "imagesTs")
     imagesVal_dir = os.path.join(output_dir, "imagesVal")
     
-    # Definir rutas de salida para etiquetas
+    # output routes for labels(GT)
     labelsTr_dir = os.path.join(output_dir, "labelsTr")
     labelsTs_dir = os.path.join(output_dir, "labelsTs")
     labelsVal_dir = os.path.join(output_dir, "labelsVal")
     
-    # Crear todas las carpetas necesarias
+    # Create all necessary folders
     for folder in [imagesTr_dir, imagesTs_dir, imagesVal_dir,
                    labelsTr_dir, labelsTs_dir, labelsVal_dir]:
         os.makedirs(folder, exist_ok=True)
     
-    # Obtener la lista de archivos .nii en el directorio de imágenes, 
-    # ignorando archivos ocultos que comienzan con "._"
+    # Get the list of .nii files ignoring hidden files that begin with "._"
     files = [f for f in os.listdir(images_dir) 
              if f.endswith(".nii.gz") and not f.startswith("._")]
     random.shuffle(files)
