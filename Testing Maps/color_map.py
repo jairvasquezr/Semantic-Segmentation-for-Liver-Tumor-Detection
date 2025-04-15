@@ -15,21 +15,18 @@ from PIL import Image
 from transformers import SegformerForSemanticSegmentation, SegformerImageProcessor
 
 def load_image(path):
-    """Carga una imagen y la convierte a RGB."""
     return Image.open(path).convert("RGB")
 
 def predict_image(model, feature_extractor, image_path, target_size=(512, 512)):
     """
-    Realiza la predicción de segmentación sobre una imagen y ajusta la resolución de salida.
-
     Args:
-        model: Modelo Segformer entrenado.
-        feature_extractor: Preprocesador de imagen.
-        image_path: Ruta a la imagen de testing.
-        target_size: Tamaño final deseado para la máscara de salida.
+        model: Trained Segformer model.
+        feature_extractor: Image preprocessor.
+        image_path: Path to the test image.
+        target_size: Desired final size for the output mask.
 
     Returns:
-        Predicción en forma de máscara con índices de clase (0: background, 1: liver, 2: tumor).
+       Mask prediction with class indices (0: background, 1: liver, 2: tumor).
     """
     image = load_image(image_path)
     encoding = feature_extractor(images=np.array(image), return_tensors="pt")
@@ -40,7 +37,7 @@ def predict_image(model, feature_extractor, image_path, target_size=(512, 512)):
 
     logits = outputs.logits  # Shape: [batch_size, num_labels, H, W]
 
-    # Interpolación de logits a 512x512 antes de aplicar argmax
+    # Interpolation of logits to 512x512 before applying argmax
     logits_up = F.interpolate(logits, size=target_size, mode="bilinear", align_corners=False)
     predicted_mask = torch.argmax(logits_up, dim=1).squeeze(0).cpu().numpy()
 
@@ -48,12 +45,12 @@ def predict_image(model, feature_extractor, image_path, target_size=(512, 512)):
 
 def apply_color_map(mask):
     """
-    Aplica un mapa de colores a la máscara de segmentación.
+    Apply color map to the predicted label.
 
     Mapeo:
-      - 0: background -> negro [0, 0, 0]
-      - 1: liver -> verde [0, 255, 0]
-      - 2: tumor -> rojo [255, 0, 0]
+      - 0: background -> black [0, 0, 0]
+      - 1: liver -> green [0, 255, 0]
+      - 2: tumor -> red [255, 0, 0]
 
     Args:
         mask: Array 2D con índices de clase.
@@ -62,37 +59,37 @@ def apply_color_map(mask):
         Imagen de la máscara coloreada (array 3D en formato uint8).
     """
     color_map = np.array([
-        [0, 0, 0],      # 0: Background (negro)
-        [0, 255, 0],    # 1: Liver (verde)
-        [255, 0, 0]     # 2: Tumor (rojo)
+        [0, 0, 0],      # 0: Background (black)
+        [0, 255, 0],    # 1: Liver (green)
+        [255, 0, 0]     # 2: Tumor (red)
     ], dtype=np.uint8)
 
     colored_mask = color_map[mask]
     return colored_mask
 
 def main():
-    # Actualiza estas rutas según tu entorno en Compute Canada
-    model_save_path = "/content/drive/MyDrive/ELAP_Project/models/test_1.0/model_test_1.0"  # Ruta del modelo entrenado
-    test_img_dir = "/content/drive/MyDrive/testing/imagesTs"  # Directorio de imágenes de testing en PNG
-    output_dir = "/content/drive/MyDrive/testing/results_color_map"  # Directorio para guardar las predicciones
+    # Paths
+    model_save_path = "/content/drive/MyDrive/ELAP_Project/models/test_1.0/model_test_1.0"
+    test_img_dir = "/content/drive/MyDrive/testing/imagesTs"  
+    output_dir = "/content/drive/MyDrive/testing/results_color_map" 
     os.makedirs(output_dir, exist_ok=True)
 
-    # Cargar el modelo y el feature extractor
+    # Load the model and feature extractor
     feature_extractor = SegformerImageProcessor.from_pretrained(model_save_path)
     model = SegformerForSemanticSegmentation.from_pretrained(model_save_path)
     model.eval()  # Modo evaluación
 
-    # Listar imágenes de testing (se asume extensión .png)
+    # Images testing (.png)
     test_images = [f for f in os.listdir(test_img_dir) if f.lower().endswith(".png")]
     print(f"Se encontraron {len(test_images)} imágenes de testing.")
 
-    # Procesar cada imagen y guardar la máscara coloreada sin necesidad de redimensionamiento extra
+    # Process each image and save the colored mask
     for img_name in test_images:
         img_path = os.path.join(test_img_dir, img_name)
         pred_mask = predict_image(model, feature_extractor, img_path)
         colored_mask = apply_color_map(pred_mask)
 
-        # Guardar la imagen con la resolución correcta (512x512)
+        # resolution(512x512)
         output_path = os.path.join(output_dir, f"pred_{img_name}")
         Image.fromarray(colored_mask).save(output_path)
         print(f"Procesada {img_name} -> {output_path}")
