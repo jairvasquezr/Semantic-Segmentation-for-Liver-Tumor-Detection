@@ -12,14 +12,14 @@ from sklearn.metrics import accuracy_score, recall_score, precision_score
 from tqdm import tqdm
 
 # ============================
-# 1. Definir las rutas para test (actualiza según corresponda)
+# 1. Define the routes for testing images and labels
 # ============================
 test_img_dir = "/home/jair/projects/def-saadi/jair/Data/data_original/data_reduced_png/imagesTs_red_png"
 test_mask_dir = "/home/jair/projects/def-saadi/jair/Data/data_original/data_reduced_png/labelsTs_red_png"
 model_save_path = "/home/jair/projects/def-saadi/jair/models/model_test_1.0"
 
 # ============================
-# 2. Funciones auxiliares para carga de datos
+# 2. Functions
 # ============================
 def load_image(path):
     return Image.open(path).convert("RGB")
@@ -55,7 +55,7 @@ class LiverTestDataset(Dataset):
         return {"pixel_values": pixel_values, "labels": mask}
 
 # ============================
-# 3. Cargar modelo y feature extractor
+# 3. Using the trained model
 # ============================
 print("Cargando modelo y feature extractor...")
 feature_extractor = SegformerImageProcessor.from_pretrained(model_save_path)
@@ -65,13 +65,13 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.to(device)
 
 # ============================
-# 4. Crear el dataset y dataloader de test
+# 4. Dataset and dataloader of test
 # ============================
 test_dataset = LiverTestDataset(test_img_dir, test_mask_dir, feature_extractor)
 test_loader = DataLoader(test_dataset, batch_size=4, shuffle=False)
 
 # ============================
-# 5. Evaluación del modelo
+# 5. Evaluation
 # ============================
 all_predictions = []
 all_labels = []
@@ -103,7 +103,7 @@ flat_preds = all_predictions.flatten()
 flat_labels = all_labels.flatten()
 
 # ============================
-# 6. Calcular las métricas globales
+# 6. Calculate global metrics
 # ============================
 # Overall Accuracy
 overall_acc = accuracy_score(flat_labels, flat_preds)
@@ -118,7 +118,7 @@ precision_macro = precision_score(flat_labels, flat_preds, average='macro', zero
 print(f"Precision (macro): {precision_macro:.4f}")
 
 # ============================
-# 7. Calcular métricas por clase
+# 7. Calculate metrics per class
 # ============================
 num_classes = 3
 
