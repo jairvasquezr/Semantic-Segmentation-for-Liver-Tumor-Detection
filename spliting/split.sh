@@ -1,16 +1,16 @@
 #!/bin/bash
 #SBATCH --job-name=split_lits
 #SBATCH --nodes=1
-#SBATCH --time=20:00       # Ajusta el tiempo según sea necesario
-#SBATCH --mem=16G             # Memoria total del nodo
-#SBATCH --cpus-per-task=4     # Número de núcleos
+#SBATCH --time=20:00       # Max time
+#SBATCH --mem=16G             # Memory
+#SBATCH --cpus-per-task=4     # number of cores
 #SBATCH --output=split_lits_%j.out
 #SBATCH --error=split_lits_%j.err
 
-# Cargar módulos necesarios
+# Load required modules
 module load python/3.11
 
-# Activar el entorno virtual
+# Activate the virtual environment
 source ~/jupyter_py3/bin/activate
 
 # Definir rutas
