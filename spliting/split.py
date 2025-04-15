@@ -5,10 +5,6 @@ import shutil
 import argparse
 
 def split_dataset(images_dir, labels_dir, output_dir, train_ratio=0.7, test_ratio=0.2, val_ratio=0.1):
-    """
-    Divide los archivos .nii en las carpetas de imágenes y etiquetas
-    en conjuntos de train, test y validation.
-    """
     # Definir rutas de salida para imágenes
     imagesTr_dir = os.path.join(output_dir, "imagesTr")
     imagesTs_dir = os.path.join(output_dir, "imagesTs")
@@ -47,7 +43,7 @@ def split_dataset(images_dir, labels_dir, output_dir, train_ratio=0.7, test_rati
         if os.path.exists(src_path):
             shutil.move(src_path, dst_path)
         else:
-            print(f"⚠️  Archivo no encontrado: {src_path}")
+            print(f"Archivo no encontrado: {src_path}")
     
     # Mover archivos de imágenes a sus respectivas carpetas
     for f in train_files:
@@ -65,7 +61,7 @@ def split_dataset(images_dir, labels_dir, output_dir, train_ratio=0.7, test_rati
     for f in val_files:
         move_file(f, labels_dir, labelsVal_dir)
     
-    print("✅ División completada:")
+    print("División completada:")
     print(f"  - Train: {len(train_files)} archivos")
     print(f"  - Test:  {len(test_files)} archivos")
     print(f"  - Val:   {len(val_files)} archivos")
