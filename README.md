@@ -15,3 +15,10 @@ In the NIFTI format, pixel intensities are represented in Hounsfield Units (HU),
 
 ## Expertiment
 The proposed method was implemented using Python and the Pytorch deep learning library. The experiments were conducted on the Cedar cluster, which consists of a variety of nodes, including large-memory nodes and GPU-accelerated nodes. The training process utilized 12.18 GB of RAM on an Intel E5-2650 v4 Broadwell CPU 2.2GHz and an NVIDIA P100 Pascal GPU with 12 GB of memory.
+
+## Results
+![segmentation_1](https://github.com/user-attachments/assets/63482cd2-74e2-4f22-960f-0a051c0af990)
+
+![probability_map](https://github.com/user-attachments/assets/3aa7a04d-865f-4695-adba-2e33f00dd260)
+
+
