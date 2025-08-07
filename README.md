@@ -24,6 +24,9 @@ In the NIFTI format, pixel intensities are represented in Hounsfield Units (HU),
 The proposed method was implemented using Python and the Pytorch deep learning library. The experiments were conducted on the Cedar cluster, which consists of a variety of nodes, including large-memory nodes and GPU-accelerated nodes. The training process utilized 12.18 GB of RAM on an Intel E5-2650 v4 Broadwell CPU 2.2GHz and an NVIDIA P100 Pascal GPU with 12 GB of memory.
 
 ## Results
+A SegFormer-based model was proposed for the automatic segmentation of the liver and tumors in CT images. The model was validated on the LiTS dataset, achieving Dice scores of 0.949 for liver segmentation and 0.775 for tumor segmentation—outperforming the nnU-Net benchmark from MICCAI 2018 in tumor delineation.
+
+This approach delivers accurate segmentation results while significantly reducing manual workload, saving time, and enabling earlier clinical intervention.
 ![segmentation_1](https://github.com/user-attachments/assets/63482cd2-74e2-4f22-960f-0a051c0af990)
 
 ![probability_map](https://github.com/user-attachments/assets/3aa7a04d-865f-4695-adba-2e33f00dd260)
@@ -33,3 +36,5 @@ Table 1 summarizes the liver segmentation results in terms of the Dice coefficie
 <img width="504" height="206" alt="image" src="https://github.com/user-attachments/assets/490c91c3-4103-4496-90e7-d5a002d069a1" />
 
 Table 2 presents the performance of various architectures for tumor segmentation. It can be observed that our model outperforms the method proposed by F. Isensee et al. (nnU-Net).
+
+<img width="551" height="306" alt="image" src="https://github.com/user-attachments/assets/578a00c6-6fdf-4c33-87b1-f6a2dae52137" />
