@@ -1,6 +1,13 @@
 # Semantic-Segmentation-for-Liver-Tumor-Detection
 This project applies the SegFormer model for semantic segmentation of liver and tumor regions in CT scans, using the LiTS (Liver Tumor Segmentation) dataset. It includes dataset preprocessing, training, and inference pipelines, along with reproducible code and pretrained checkpoints.
 
+## Problem Statement
+The liver is one of the largest organs in the human body. Liver cancer, a condition in which malignant (cancerous) cells form in liver tissue, poses a serious global health concern. It ranks among the top three causes of cancer-related deaths in many countries. Alarmingly, the liver cancer mortality rate is projected to rise by 56.4% by the year 2040.
+
+Computed Tomography (CT) remains the standard imaging technique for detecting liver tumors. However, manual segmentation of the liver and tumors in CT scans is a time-consuming and subjective task, highlighting the need for automated and reliable solutions.
+
+## Objective
+This work aims to optimize the radiotherapy planning process by implementing a Deep Learning model—SegFormer, based on Vision Transformers—to automate the segmentation of the liver and tumors in CT images. The goal is to enhance segmentation accuracy while significantly reducing the need for manual intervention.
 
 ## Dataset - LiTS (Liver Tumor Segmentation Challenge)
 
@@ -21,4 +28,8 @@ The proposed method was implemented using Python and the Pytorch deep learning l
 
 ![probability_map](https://github.com/user-attachments/assets/3aa7a04d-865f-4695-adba-2e33f00dd260)
 
+Table 1 summarizes the liver segmentation results in terms of the Dice coefficient.
 
+<img width="504" height="206" alt="image" src="https://github.com/user-attachments/assets/490c91c3-4103-4496-90e7-d5a002d069a1" />
+
+Table 2 presents the performance of various architectures for tumor segmentation. It can be observed that our model outperforms the method proposed by F. Isensee et al. (nnU-Net).
